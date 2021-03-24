@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 
 echo "--------------------------------------"
+echo "---- Install additional packages -----"
+echo "--------------------------------------"
+
+pacman -S base-devel vim sudo grub networkmanager dhclient --noconfirm --needed
+
+
+echo "--------------------------------------"
 echo "--- Set Timezone, Clock and Locale ---"
 echo "--------------------------------------"
 
@@ -17,14 +24,13 @@ echo "KEYMAP=${COUNTRY,,}" >> /etc/vconsole.conf
 echo "--------------------------------------"
 echo "-- Bootloader Systemd Installation  --"
 echo "--------------------------------------"
-grub-install --target=i386-pc ${DISK}
+grub-install --target=i386-pc $1
 grub-mkconfig -o /boot/grub/grub.cfg
 
 
 echo "--------------------------------------"
 echo "--          Network Setup           --"
 echo "--------------------------------------"
-pacman -S networkmanager dhclient --noconfirm --needed
 systemctl enable --now NetworkManager
 
 
@@ -39,7 +45,8 @@ passwd root
 echo "--------------------------------------"
 echo "--           Set hostname           --"
 echo "--------------------------------------"
-read -p "Please enter hostname:" HOSTNAME
+echo "Please enter hostname:"
+read HOSTNAME
 echo $HOSTNAME > /etc/hostname
 echo "127.0.0.1 localhost" > /etc/hosts
 echo "::1       localhost" >> /etc/hosts
@@ -50,7 +57,8 @@ echo "127.0.1.1 "${HOSTNAME}".localdomain   "${HOSTNAME} >> /etc/hosts
 echo "--------------------------------------"
 echo "--             Add user             --"
 echo "--------------------------------------"
-read -p "Please enter username:" USERNAME
+echo "Please enter username:"
+read USERNAME
 useradd -m $USERNAME
 passwd $USERNAME
 
@@ -60,10 +68,3 @@ sed -i 's/^%wheel ALL=(ALL) NOPASSWD: ALL/# %wheel ALL=(ALL) NOPASSWD: ALL/' /et
 sed -i 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 
 
-# exit and umount
-exit
-umount -R /mnt
-
-echo "--------------------------------------"
-echo "--   SYSTEM READY FOR FIRST BOOT    --"
-echo "--------------------------------------"
