@@ -4,7 +4,7 @@ echo "--------------------------------------"
 echo "---- Install additional packages -----"
 echo "--------------------------------------"
 
-pacman -S base-devel vim sudo grub networkmanager dhclient --noconfirm --needed
+pacman -S base-devel vim sudo grub networkmanager dhclient git --noconfirm --needed
 
 
 echo "--------------------------------------"

@@ -17,6 +17,10 @@ PKGS=(
         'picom'                 # Translucent Windows
         'nitrogen'              # Set Wallpaper
 
+    # --- Audio
+        'alsa-utils'        # Advanced Linux Sound Architecture (ALSA) Components https://alsa.opensrc.org/
+        'alsa-plugins'      # ALSA plugins
+
     # --- Networking Setup
         'wpa_supplicant'            # Key negotiation for WPA wireless networks
 
@@ -29,7 +33,8 @@ done
 
 
 echo "INSTALLING dwm, dmenu and st"
-cd suckless/dwm && sudo make clean install
+cp suckless ~/suckless
+cd ~/suckless/dwm && sudo make clean install
 cd ../dmenu && sudo make clean install
 cd ../st && sudo make clean install
 
