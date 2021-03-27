@@ -60,10 +60,10 @@ pacstrap /mnt base linux linux-firmware --noconfirm --needed
 genfstab -U /mnt >> /mnt/etc/fstab
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 cp /root/auto-arch/1-setup.sh /mnt/home/
-arch-chroot /mnt bash /home/1-setup.sh $DISK
+arch-chroot /mnt bash /home/setup.sh $DISK
 
 # finally
-rm /mnt/home/1-setup.sh
+rm /mnt/home/setup.sh
 umount -R /mnt
 
 echo "--------------------------------------"
