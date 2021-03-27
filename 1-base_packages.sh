@@ -33,7 +33,7 @@ done
 
 
 echo "INSTALLING dwm, dmenu and st"
-cp suckless ~/suckless
+cp -r suckless ~/suckless
 cd ~/suckless/dwm && sudo make clean install
 cd ../dmenu && sudo make clean install
 cd ../st && sudo make clean install
