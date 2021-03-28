@@ -11,15 +11,16 @@ echo "--------------------------------------"
 echo "--- Set Timezone, Clock and Locale ---"
 echo "--------------------------------------"
 
-echo "Please enter country name: (example Poland)"
-read COUNTRY_NAME
-ln -sf /usr/share/zoneinfo/${COUNTRY_NAME,,} /etc/localtime
+ln -sf /usr/share/zoneinfo/Europe/Warsaw /etc/localtime
 hwclock --systohc
 
 sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+sed -i 's/^#pl_PL.UTF-8 UTF-8/pl_PL.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
-echo "LANG=en_US.UTF-8" >> /etc/locale.conf
-echo "KEYMAP=${COUNTRY,,}" >> /etc/vconsole.conf
+echo "LANG=pl_PL.UTF-8" >> /etc/locale.conf
+echo "KEYMAP=pl" >> /etc/vconsole.conf
+echo "FONT=Lat2-Terminus16" >> /etc/vconsole.conf
+echo "FONT_MAP=8859-2" >> /etc/vconsole.conf
 
 echo "--------------------------------------"
 echo "-- Bootloader Systemd Installation  --"

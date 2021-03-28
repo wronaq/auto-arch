@@ -14,9 +14,7 @@ timedatectl --no-ask-password set-timezone Europe/Warsaw
 timedatectl --no-ask-password set-ntp 1
 pacman -S --noconfirm pacman-contrib
 mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-echo "Please enter country abbreviation: (example US, PL, etc.)"
-read COUNTRY
-curl -s "https://archlinux.org/mirrorlist/?country="${COUNTRY^^}"&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 0 - > /etc/pacman.d/mirrorlist
+curl -s "https://archlinux.org/mirrorlist/?country=PL&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 0 - > /etc/pacman.d/mirrorlist
 
 
 echo "-------------------------------------------------"
