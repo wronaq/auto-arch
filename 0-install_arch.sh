@@ -57,7 +57,7 @@ echo "--------------------------------------"
 pacstrap /mnt base linux linux-firmware --noconfirm --needed
 genfstab -U /mnt >> /mnt/etc/fstab
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
-cp /root/auto-arch/1-setup.sh /mnt/home/
+cp /root/auto-arch/setup.sh /mnt/home/
 arch-chroot /mnt bash /home/setup.sh $DISK
 
 # finally
