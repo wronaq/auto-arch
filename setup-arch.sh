@@ -33,7 +33,9 @@ echo "--          Network Setup           --"
 echo "--------------------------------------"
 systemctl enable systemd-networkd.service
 systemctl enable NetworkManager.service
-systemctl start NetworkManager.service
+echo "Set up a wifi connection? [Y/n]"
+read SETUP
+[ $SETUP='Y' ] && echo 'Enter SSID:' && read SSID && echo 'Enter password:' && read -s PASSWORD && nmcli device wifi connect "${SSID}" password "${PASSWORD}"
 
 
 echo "--------------------------------------"

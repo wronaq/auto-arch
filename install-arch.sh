@@ -61,6 +61,7 @@ cp /root/auto-arch/setup-arch.sh /mnt/home/
 arch-chroot /mnt sh /home/setup-arch.sh $DISK
 
 # finally
+cp -r /mnt/etc/NetworkManager/system-connections/* /etc/NetworkManager/system-connections/
 rm /mnt/home/setup-arch.sh
 umount -R /mnt
 
