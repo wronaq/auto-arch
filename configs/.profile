@@ -1,5 +1,5 @@
-if [ -f ~/.bashrc ]; then
-    source ~/.bashrc
+if [ -f ~/.zshrc ]; then
+    source ~/.zshrc
 fi
 
 if [[ "$(tty)" = "/dev/tty1" ]]; then
