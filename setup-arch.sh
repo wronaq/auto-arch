@@ -31,7 +31,9 @@ grub-mkconfig -o /boot/grub/grub.cfg
 echo "--------------------------------------"
 echo "--          Network Setup           --"
 echo "--------------------------------------"
-systemctl enable --now NetworkManager
+systemctl enable systemd-networkd.service
+systemctl enable NetworkManager.service
+systemctl start NetworkManager.service
 
 
 echo "--------------------------------------"
