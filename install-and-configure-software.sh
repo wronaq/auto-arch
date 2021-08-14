@@ -2,7 +2,7 @@
 
 ### VARIABLES ###
 
-NAME=$1
+NAME=$(whoami)
 DOTFILESREPO="https://github.com/wronaq/auto-arch.git"
 PROGSFILE="https://github.com/wronaq/auto-arch/blob/main/progs.csv"
 
@@ -51,7 +51,7 @@ aurinstall() { \
 	}
 
 installationloop() { \
-	([ -f "$PROGSFILE" ] && cp "$PROGSFILE" /tmp/progs.csv) || curl -Ls "$PROGSFILE" | sed '/^#/d' > /tmp/progs.csv
+	curl -Ls "$PROGSFILE" | sed '/^#/d' > /tmp/progs.csv
 	TOTAL=$(wc -l < /tmp/progs.csv)
 	AURINSTALLED=$(pacman -Qqm)
 	while IFS=, read -r TAG PROGRAM COMMENT; do
