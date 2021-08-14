@@ -24,7 +24,7 @@ lsblk
 echo "Please enter disk: (example /dev/sda)"
 read DISK
 echo "--------------------------------------"
-echo -e "\nFormatting disk...\n$HR"
+echo -e "\nFormatting disk...\n"
 echo "--------------------------------------"
 
 # disk prep
@@ -38,10 +38,10 @@ type=83
 EOF
 
 # make filesystems
-echo -e "\nCreating Filesystems...\n$HR"
+echo -e "\nCreating Filesystems...\n"
 
 for x in {1..3}; do
-    mkfs.ext4 "${DISK}${x}"
+    yes | mkfs.ext4 "${DISK}${x}"
 done
 
 # mount target
