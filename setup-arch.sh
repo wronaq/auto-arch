@@ -61,9 +61,10 @@ echo "--             Add user             --"
 echo "--------------------------------------"
 echo "Please enter username:"
 read USERNAME
-useradd -m -g wheel -s /bin/zsh "$USERNAME" >/dev/null 2>&1 ||
+useradd -m -g wheel,audio,video,optical,disk,input,storage -s /bin/zsh "$USERNAME" >/dev/null 2>&1 ||
 usermod -aG wheel,audio,video,optical,disk,input,storage "$USERNAME" && mkdir -p /home/"$USERNAME" && chown "$USERNAME":wheel /home/"$USERNAME"
 REPODIR="/home/$USERNAME/.local/src"; mkdir -p "$REPODIR"; chown -R "$USERNAME":wheel "$(dirname "$REPODIR")"
+chown -R "$USERNAME":wheel /home/auto-arch/ && mv /home/auto-arch /home/"$USERNAME"
 passwd $USERNAME
 
 # set nopasswd for whole process of instalation

@@ -9,7 +9,7 @@ PROGSFILE="https://github.com/wronaq/auto-arch/blob/main/progs.csv"
 ### ENABLE WIFI ###
 echo -e "Set up a wifi connection? [Y/n] "
 read SETUP
-[ $SETUP='Y' ] && echo 'Enter SSID:' && read SSID && echo 'Enter password:' && read -s PASSWORD && nmcli device wifi connect "${SSID}" password "${PASSWORD}"
+[ "$SETUP" = "Y" ] && echo 'Enter SSID:' && read SSID && echo 'Enter password:' && read -s PASSWORD && nmcli device wifi connect "${SSID}" password "${PASSWORD}"
 
 ### FUNCTIONS ###
 
@@ -20,7 +20,7 @@ error() { echo "ERROR: $1" ; exit 1;}
 refreshkeys() { \
 	echo "Refreshing Arch Keyring..."
 	# pacman -Q artix-keyring >/dev/null 2>&1 && pacman --noconfirm -S artix-keyring artix-archlinux-support >/dev/null 2>&1
-	pacman --noconfirm -S archlinux-keyring >/dev/null 2>&1
+	sudo -u "$NAME" pacman --noconfirm -S archlinux-keyring >/dev/null 2>&1
 	}
 
 manualinstall() { # Installs $1 manually if not installed. Used only for AUR helper here.
