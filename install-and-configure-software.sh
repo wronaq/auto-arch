@@ -2,13 +2,13 @@
 
 ### VARIABLES ###
 
-echo -e "Install for user: "
+echo -n "Install for user: "
 read NAME
 DOTFILESREPO="https://github.com/wronaq/auto-arch.git"
-PROGSFILE="https://github.com/wronaq/auto-arch/blob/main/progs.csv"
+PROGSFILE="https://raw.githubusercontent.com/wronaq/auto-arch/main/progs.csv"
 
 ### ENABLE WIFI ###
-echo -e "Set up a wifi connection? [Y/n] "
+echo -n "Set up a wifi connection? [Y/n] "
 read SETUP
 [ "$SETUP" = "Y" ] && echo 'Enter SSID:' && read SSID && echo 'Enter password:' && read -s PASSWORD && nmcli device wifi connect "${SSID}" password "${PASSWORD}"
 
@@ -52,7 +52,7 @@ gitmakeinstall() {
 aurinstall() { \
 	echo "Installing \`$1\` ($N of $TOTAL) from the AUR. $1 $2"
 	echo "$AURINSTALLED" | grep -q "^$1$" && return 1
-	sudo -u "$NAME" paru -S --noconfirm "$1" >/dev/null 2>&1
+	sudo -u "$NAME" yay -S --noconfirm "$1" >/dev/null 2>&1
 	}
 
 installationloop() { \
@@ -95,14 +95,14 @@ ntpdate pl.pool.ntp.org >/dev/null 2>&1
 # Allow user to run sudo without password. Since AUR programs must be installed
 # in a fakeroot environment, this is required for all builds with AUR.
 
-# Make pacman and paru colorful and adds eye candy on the progress bar because why not.
+# Make pacman and yay colorful and adds eye candy on the progress bar because why not.
 grep -q "^Color" /etc/pacman.conf || sed -i "s/^#Color$/Color/" /etc/pacman.conf
 grep -q "ILoveCandy" /etc/pacman.conf || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
 
 # Use all cores for compilation.
 sed -i "s/-j2/-j$(nproc)/;s/^#MAKEFLAGS/MAKEFLAGS/" /etc/makepkg.conf
 
-manualinstall paru || error "Failed to install AUR helper."
+manualinstall yay || error "Failed to install AUR helper."
 
 # The command that does all the installing. Reads the progs.csv file and
 # installs each needed program the way required. Be sure to run this only after
@@ -111,7 +111,7 @@ manualinstall paru || error "Failed to install AUR helper."
 installationloop
 
 echo "Finally, installing \`libxft-bgra\` to enable color emoji in suckless software without crashes."
-yes | sudo -u "$NAME" paru -S libxft-bgra-git >/dev/null 2>&1
+yes | sudo -u "$NAME" yay -S libxft-bgra-git >/dev/null 2>&1
 
 # Install the dotfiles in the user's home directory
 pulldotfiles "$DOTFILESREPO" "/home/$NAME"
@@ -142,7 +142,7 @@ killall pulseaudio; sudo -u "$NAME" pulseaudio --start
 
 # This line, overwriting the `newperms` command above will allow the user to run
 # serveral important commands, `shutdown`, `reboot`, updating, etc. without a password.
-sed -i 's/^%wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/wifi-menu,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/packer -Syu,/usr/bin/packer -Syyu,/usr/bin/systemctl restart NetworkManager,/usr/bin/rc-service NetworkManager restart,/usr/bin/pacman -Syyu --noconfirm,/usr/bin/loadkeys,/usr/bin/paru,/usr/bin/pacman -Syyuw --noconfirm/' /etc/sudoers
+sed -i 's/^%wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/wifi-menu,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/packer -Syu,/usr/bin/packer -Syyu,/usr/bin/systemctl restart NetworkManager,/usr/bin/rc-service NetworkManager restart,/usr/bin/pacman -Syyu --noconfirm,/usr/bin/loadkeys,/usr/bin/yay,/usr/bin/pacman -Syyuw --noconfirm/' /etc/sudoers
 
 # ------------------------------------------------------------------------
 
