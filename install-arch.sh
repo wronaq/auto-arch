@@ -45,10 +45,10 @@ for x in {1..3}; do
 done
 
 # mount target
-mkdir /mnt/boot
-mkdir /mnt/home
 mount "${DISK}2" /mnt
-mount "${DISK}1" /mnt/boot/
+mkdir -p /mnt/boot
+mkdir -p /mnt/home
+mount "${DISK}1" /mnt/boot
 mount "${DISK}3" /mnt/home
 
 echo "--------------------------------------"
@@ -57,12 +57,10 @@ echo "--------------------------------------"
 pacstrap /mnt base linux linux-firmware --noconfirm --needed
 genfstab -U /mnt >> /mnt/etc/fstab
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
-cp /root/auto-arch/setup-arch.sh /mnt/home/
-arch-chroot /mnt sh /home/setup-arch.sh $DISK
+cp -r /root/auto-arch/ /mnt/home/
+arch-chroot /mnt sh /home/auto-arch/setup-arch.sh $DISK
 
 # finally
-cp -r /mnt/etc/NetworkManager/system-connections/* /etc/NetworkManager/system-connections/
-rm /mnt/home/setup-arch.sh
 umount -R /mnt
 
 echo "--------------------------------------"

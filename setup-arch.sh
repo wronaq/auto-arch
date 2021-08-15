@@ -4,6 +4,7 @@ echo "--------------------------------------"
 echo "---- Install additional packages -----"
 echo "--------------------------------------"
 
+pacman --noconfirm -Syu
 pacman --noconfirm --needed -S base-devel sudo grub networkmanager dhclient neovim curl git ntp zsh
 
 
@@ -33,15 +34,12 @@ echo "--          Network Setup           --"
 echo "--------------------------------------"
 systemctl enable systemd-networkd.service
 systemctl enable NetworkManager.service
-echo "Set up a wifi connection? [Y/n]"
-read SETUP
-[ $SETUP='Y' ] && echo 'Enter SSID:' && read SSID && echo 'Enter password:' && read -s PASSWORD && nmcli device wifi connect "${SSID}" password "${PASSWORD}"
 
 
 echo "--------------------------------------"
 echo "--      Set Password for Root       --"
 echo "--------------------------------------"
-echo "Enter password for root user: "
+echo "Enter password for root user"
 passwd root
 
 
@@ -70,5 +68,3 @@ passwd $USERNAME
 
 # set nopasswd for whole process of instalation
 sed -i 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
-
-
