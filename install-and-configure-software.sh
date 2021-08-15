@@ -2,7 +2,8 @@
 
 ### VARIABLES ###
 
-NAME=$(whoami)
+echo -e "Install for user: "
+read NAME
 DOTFILESREPO="https://github.com/wronaq/auto-arch.git"
 PROGSFILE="https://github.com/wronaq/auto-arch/blob/main/progs.csv"
 
@@ -19,8 +20,7 @@ error() { echo "ERROR: $1" ; exit 1;}
 
 refreshkeys() { \
 	echo "Refreshing Arch Keyring..."
-	# pacman -Q artix-keyring >/dev/null 2>&1 && pacman --noconfirm -S artix-keyring artix-archlinux-support >/dev/null 2>&1
-	sudo -u "$NAME" pacman --noconfirm -S archlinux-keyring >/dev/null 2>&1
+	pacman --noconfirm -S archlinux-keyring >/dev/null 2>&1
 	}
 
 manualinstall() { # Installs $1 manually if not installed. Used only for AUR helper here.
