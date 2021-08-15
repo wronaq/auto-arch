@@ -6,6 +6,11 @@ NAME=$(whoami)
 DOTFILESREPO="https://github.com/wronaq/auto-arch.git"
 PROGSFILE="https://github.com/wronaq/auto-arch/blob/main/progs.csv"
 
+### ENABLE WIFI ###
+echo -e "Set up a wifi connection? [Y/n] "
+read SETUP
+[ $SETUP='Y' ] && echo 'Enter SSID:' && read SSID && echo 'Enter password:' && read -s PASSWORD && nmcli device wifi connect "${SSID}" password "${PASSWORD}"
+
 ### FUNCTIONS ###
 
 installpkg(){ pacman --noconfirm --needed -S "$1" >/dev/null 2>&1 ;}
