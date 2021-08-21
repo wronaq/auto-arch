@@ -10,7 +10,7 @@ PROGSFILE="https://raw.githubusercontent.com/wronaq/auto-arch/main/progs.csv"
 ### ENABLE WIFI ###
 echo -n "Set up a wifi connection? [Y/n] "
 read SETUP
-([ "$SETUP" = "Y" ] || [ "$SETUP" = "y" ] || [ "$SETUP" = "" ]) && echo 'Enter SSID:' && read SSID && echo 'Enter password:' && read -s PASSWORD && nmcli device wifi connect "${SSID}" password "${PASSWORD}"
+([ "$SETUP" = "Y" ] || [ "$SETUP" = "y" ] || [ "$SETUP" = "" ]) && echo -n 'Enter SSID: ' && read SSID && echo -n 'Enter password: ' && read -s PASSWORD && nmcli device wifi connect "${SSID}" password "${PASSWORD}"
 
 ### FUNCTIONS ###
 
@@ -72,14 +72,16 @@ installationloop() { \
 pulldotfiles() { # Downloads a gitrepo with dotfiles
     echo "Downloading and installing config files..."
     DIR=$(mktemp -d)
-    [ ! -d "$2" ] && mkdir -p "$2"
-    chown "$NAME":wheel "$DIR" "$2"
+    [ ! -d "$2/.config" ] && mkdir -p "$2/.config"
+    [ ! -d "$2/wallpapers" ] && mkdir -p "$2/wallpapers"
+    chown -R "$NAME":wheel "$DIR" "$2"
     sudo -u "$NAME" git clone --depth 1 --recursive --recurse-submodules "$1" "$DIR" >/dev/null 2>&1
-    sudo -u "$NAME" cp -rfT "$DIR/configs/*" "$2"
+    sudo -u "$NAME" cp -rfT "$DIR/configs/" "$2/.config"
+    sudo -u "$NAME" cp -rfT "$DIR/default_wallpaper.jpg" "$2/wallpapers"
     }
 
 systembeepoff() { # Turn off system beep
-    rmmod pcspkr
+    rmmod pcspkr >/dev/null 2>&1
     echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf ;}
 
 ### THE ACTUAL SCRIPT ###
@@ -138,29 +140,11 @@ grep -q "OTHER_OPTS='-a pulseaudio -m alsa_seq -r 48000'" /etc/conf.d/fluidsynth
    echo "OTHER_OPTS='-a pulseaudio -m alsa_seq -r 48000'" >> /etc/conf.d/fluidsynth
 
 # Start/restart PulseAudio.
-killall pulseaudio; sudo -u "$NAME" pulseaudio --start
+killall pulseaudio 2>/dev/null; sudo -u "$NAME" pulseaudio --start
 
 # This line, overwriting the `newperms` command above will allow the user to run
 # serveral important commands, `shutdown`, `reboot`, updating, etc. without a password.
-sed -i 's/^%wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/wifi-menu,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/packer -Syu,/usr/bin/packer -Syyu,/usr/bin/systemctl restart NetworkManager,/usr/bin/rc-service NetworkManager restart,/usr/bin/pacman -Syyu --noconfirm,/usr/bin/loadkeys,/usr/bin/yay,/usr/bin/pacman -Syyuw --noconfirm/' /etc/sudoers
-
-# ------------------------------------------------------------------------
-
-echo -e "\nConfiguring LTS Kernel as a secondary boot option"
-
-sudo cp /boot/loader/entries/arch.conf /boot/loader/entries/arch-lts.conf
-sudo sed -i 's/Arch Linux/Arch Linux LTS Kernel/g' /boot/loader/entries/arch-lts.conf
-sudo sed -i 's/vmlinuz-linux/vmlinuz-linux-lts/g' /boot/loader/entries/arch-lts.conf
-sudo sed -i 's/initramfs-linux.img/initramfs-linux-lts.img/g' /boot/loader/entries/arch-lts.conf
-
-# ------------------------------------------------------------------------
-
-echo -e "\nEnabling bluetooth daemon and setting it to auto-start"
-
-sudo sed -i 's/#AutoEnable=false/AutoEnable=true/g' /etc/bluetooth/main.conf
-sudo systemctl enable --now bluetooth.service
-
-
+sed -i 's|^%wheel ALL=(ALL) NOPASSWD: ALL|%wheel ALL=(ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/wifi-menu,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/packer -Syu,/usr/bin/packer -Syyu,/usr/bin/systemctl restart NetworkManager,/usr/bin/rc-service NetworkManager restart,/usr/bin/pacman -Syyu --noconfirm,/usr/bin/loadkeys,/usr/bin/yay,/usr/bin/pacman -Syyuw --noconfirm|' /etc/sudoers
 
 
 ###############################################################################
@@ -168,7 +152,7 @@ sudo systemctl enable --now bluetooth.service
 ###############################################################################
 
 # Clean orphans pkg
-[ ! -n $(pacman -Qdt) ] && echo "No orphans to remove." || pacman -Rns $(pacman -Qdtq)
+[ -n $(pacman -Qdt) ] && echo "No orphans to remove." || pacman -Rns $(pacman -Qdtq) --noconfirm
 
 echo "
 ###############################################################################
