@@ -1,10 +1,7 @@
 #!/bin/sh
 
 # check if legacy BIOS
-if [ -d "/sys/firmware/efi/efivars" ]; then
-    echo "This script is for legacy BIOS only!"
-    exit 1
-fi
+[ -d "/sys/firmware/efi/efivars" ] && echo "This script is for legacy BIOS only!" && exit 1
 
 echo "-------------------------------------------"
 echo "- Setting up mirrors for optimal download -"

@@ -47,7 +47,7 @@ passwd root
 echo "--------------------------------------"
 echo "--           Set hostname           --"
 echo "--------------------------------------"
-echo -n "Please enter hostname:"
+echo -n "Please enter hostname: "
 read HOSTNAME
 echo $HOSTNAME > /etc/hostname
 echo "127.0.0.1 localhost" > /etc/hosts
@@ -59,7 +59,7 @@ echo "127.0.1.1 "${HOSTNAME}".localdomain   "${HOSTNAME} >> /etc/hosts
 echo "--------------------------------------"
 echo "--             Add user             --"
 echo "--------------------------------------"
-echo -n "Please enter username:"
+echo -n "Please enter username: "
 read USERNAME
 useradd -m -g wheel -s /bin/zsh "$USERNAME" >/dev/null 2>&1 ||
 usermod -aG wheel "$USERNAME" && mkdir -p /home/"$USERNAME" && chown "$USERNAME":wheel /home/"$USERNAME"
