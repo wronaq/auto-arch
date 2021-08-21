@@ -10,7 +10,7 @@ PROGSFILE="https://raw.githubusercontent.com/wronaq/auto-arch/main/progs.csv"
 ### ENABLE WIFI ###
 echo -n "Set up a wifi connection? [Y/n] "
 read SETUP
-[ "$SETUP" = "Y" -o "$SETUP" = "y" | "$SETUP" = "" ] && echo 'Enter SSID:' && read SSID && echo 'Enter password:' && read -s PASSWORD && nmcli device wifi connect "${SSID}" password "${PASSWORD}"
+([ "$SETUP" = "Y" ] || [ "$SETUP" = "y" ] || [ "$SETUP" = "" ]) && echo 'Enter SSID:' && read SSID && echo 'Enter password:' && read -s PASSWORD && nmcli device wifi connect "${SSID}" password "${PASSWORD}"
 
 ### FUNCTIONS ###
 
