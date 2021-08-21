@@ -1,2 +1,1 @@
-xwallpaper --zoom ~/wallpapers/default_wallpaper.jpg &
-exec dwm
+.config/x11/.xinitrc

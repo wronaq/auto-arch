@@ -77,7 +77,7 @@ pulldotfiles() { # Downloads a gitrepo with dotfiles
     chown -R "$NAME":wheel "$DIR" "$2"
     sudo -u "$NAME" git clone --depth 1 --recursive --recurse-submodules "$1" "$DIR" >/dev/null 2>&1
     sudo -u "$NAME" cp -rfT "$DIR/configs/" "$2/.config"
-    sudo -u "$NAME" cp -rfT "$DIR/default_wallpaper.jpg" "$2/wallpapers"
+    sudo -u "$NAME" cp -f "$DIR/default_wallpaper.jpg" "$2/wallpapers"
     }
 
 systembeepoff() { # Turn off system beep
