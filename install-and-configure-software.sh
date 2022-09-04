@@ -13,7 +13,7 @@ read SETUP
 ([ "$SETUP" = "Y" ] || [ "$SETUP" = "y" ] || [ "$SETUP" = "" ]) && echo -n 'Enter SSID: ' && read SSID && echo -n 'Enter password: ' && read -s PASSWORD && nmcli device wifi connect "${SSID}" password "${PASSWORD}"
 
 ### PERMISSIONS FOR WHEEL GROUP
-sed -i 's|^#%wheel ALL=(ALL) NOPASSWD: ALL|%wheel ALL=(ALL) NOPASSWD: ALL|' /etc/sudoers
+sed -i 's|^# %wheel ALL=(ALL) NOPASSWD: ALL|%wheel ALL=(ALL) NOPASSWD: ALL|' /etc/sudoers
 
 ### FUNCTIONS ###
 
