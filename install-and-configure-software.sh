@@ -12,6 +12,9 @@ echo -n "Set up a wifi connection? [Y/n] "
 read SETUP
 ([ "$SETUP" = "Y" ] || [ "$SETUP" = "y" ] || [ "$SETUP" = "" ]) && echo -n 'Enter SSID: ' && read SSID && echo -n 'Enter password: ' && read -s PASSWORD && nmcli device wifi connect "${SSID}" password "${PASSWORD}"
 
+### PERMISSIONS FOR WHEEL GROUP
+sed -i 's|^#%wheel ALL=(ALL) NOPASSWD: ALL|%wheel ALL=(ALL) NOPASSWD: ALL|' /etc/sudoers
+
 ### FUNCTIONS ###
 
 installpkg(){ pacman --noconfirm --needed -S "$1" >/dev/null 2>&1 ;}
@@ -142,10 +145,10 @@ grep -q "OTHER_OPTS='-a pulseaudio -m alsa_seq -r 48000'" /etc/conf.d/fluidsynth
 # Start/restart PulseAudio.
 killall pulseaudio 2>/dev/null; sudo -u "$NAME" pulseaudio --start
 
-# This line, overwriting the `newperms` command above will allow the user to run
+# This lines, overwriting the permissions set up above and allow the user to run
 # serveral important commands, `shutdown`, `reboot`, updating, etc. without a password.
 sed -i 's|^%wheel ALL=(ALL) NOPASSWD: ALL|%wheel ALL=(ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/wifi-menu,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/packer -Syu,/usr/bin/packer -Syyu,/usr/bin/systemctl restart NetworkManager,/usr/bin/rc-service NetworkManager restart,/usr/bin/pacman -Syyu --noconfirm,/usr/bin/loadkeys,/usr/bin/yay,/usr/bin/pacman -Syyuw --noconfirm|' /etc/sudoers
-
+sed -i 's|^#%wheel ALL=(ALL)|%wheel ALL=(ALL)|' /etc/sudoers
 
 ###############################################################################
 # Cleaning
